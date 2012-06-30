@@ -25,8 +25,8 @@ __esn_prompt_git_remote_status() {
 
     if [ -z "$remote" ]; then exit 0; fi
 
-    local behind=$(git rev-list $1..$remote | wc -l)
-    local ahead=$(git rev-list $remote..$1 | wc -l)
+    local behind=$(git rev-list $1..$remote/$1 | wc -l)
+    local ahead=$(git rev-list $remote/$1..$1 | wc -l)
 
     if [ "$behind" -ne 0 -a "$ahead" -ne 0 ]; then
 	echo -e "$__esn_col_red$__esn_utf8_updown_arrow"
