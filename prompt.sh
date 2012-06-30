@@ -16,12 +16,6 @@ __esn_utf8_updown_arrow="\xe2\x86\x95"
 __esn_utf8_upwards_arrow="\xe2\x86\x91"
 __esn_utf8_downwards_arrow="\xe2\x86\x93"
 
-__esn_git_dirty_prompt_status() {
-    if (git status -s --porcelain | grep '^\s+M'); then
-	__esn_prompt_color 31
-    fi
-}
-
 __esn_unicode_by_name() {
     python -c "import sys; sys.stdout.write(u'\N{$1}'.encode('utf-8'))"
 }
@@ -50,7 +44,7 @@ __esn_prompt_git_status() {
     local branch=$(git symbolic-ref HEAD 2>&1| cut -d/ -f3)
 
     local branch_col=$__esn_col_green
-    if echo $gitstatus | grep '^\s*M' > /dev/null 2>&1 ; then
+    if echo $gitstatus | grep '^\s*[MA]' > /dev/null 2>&1 ; then
 	local branch_col=$__esn_col_red
     fi
 
