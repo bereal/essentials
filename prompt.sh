@@ -58,7 +58,7 @@ __esn_prompt_venv() {
 }
 
 __esn_prompt_command() {
-    PS1="\u@\h$(__esn_prompt_venv):\[$__esn_col_lyellow\]\w$(__esn_prompt_git_status)$__esn_col_no\n[\!]\$ "
+    PS1="\u@\h$(__esn_prompt_venv):\[$__esn_col_lyellow\]\w$(__esn_prompt_git_status)$__esn_col_no\n\t [\!]\$ "
 }
 
 PROMPT_COMMAND=__esn_prompt_command
