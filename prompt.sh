@@ -38,13 +38,13 @@ __esn_prompt_git_remote_status() {
 }
 
 __esn_prompt_git_status() {
-    gitstatus=$(git status -s --porcelain 2>&1)
+    gitstatus=$(git status -suno 2>/dev/null)
     if [ $? -ne 0 ]; then exit 0; fi
 
     local branch=$(git symbolic-ref HEAD 2>&1| cut -d/ -f3)
 
     local branch_col=$__esn_col_green
-    if echo $gitstatus | grep '^\s*[MA]' > /dev/null 2>&1 ; then
+    if [ -n "$gitstatus" ] ; then
 	local branch_col=$__esn_col_red
     fi
 
