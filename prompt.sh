@@ -21,12 +21,14 @@ __esn_unicode_by_name() {
 }
 
 __esn_prompt_git_remote_status() {
-    local remote=$(git config branch.$1.remote)
+    remote=$(git config branch.$1.remote)
+    rbranch=$(git config branch.$1.merge)
+    rbranch=$remote/${rbranch##refs/heads/}
 
     if [ -z "$remote" ]; then exit 0; fi
 
-    local behind=$(git rev-list $1..$remote/$1 | wc -l)
-    local ahead=$(git rev-list $remote/$1..$1 | wc -l)
+    behind=$(git rev-list $1..$rbranch | wc -l)
+    ahead=$(git rev-list $rbranch..$1 | wc -l)
 
     if [ "$behind" -ne 0 -a "$ahead" -ne 0 ]; then
 	echo -e "$__esn_col_red$__esn_utf8_updown_arrow"
@@ -41,7 +43,8 @@ __esn_prompt_git_status() {
     gitstatus=$(git status -suno 2>/dev/null)
     if [ $? -ne 0 ]; then exit 0; fi
 
-    local branch=$(git symbolic-ref HEAD 2>&1| cut -d/ -f3)
+    branch=$(git symbolic-ref HEAD 2>&1)
+    branch=${branch##refs/heads/}
 
     local branch_col=$__esn_col_green
     if [ -n "$gitstatus" ] ; then
@@ -58,7 +61,7 @@ __esn_prompt_venv() {
 }
 
 __esn_prompt_command() {
-    PS1="\u@\h$(__esn_prompt_venv):\[$__esn_col_lyellow\]\w$(__esn_prompt_git_status)$__esn_col_no\n\t [\#]\$ "
+    PS1="$__esn_col_green\u@\h$(__esn_prompt_venv):\[$__esn_col_lyellow\]\w$(__esn_prompt_git_status)$__esn_col_no\n\t [\#]\$ "
 }
 
 PROMPT_COMMAND=__esn_prompt_command
