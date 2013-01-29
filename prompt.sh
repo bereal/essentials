@@ -22,10 +22,10 @@ __esn_unicode_by_name() {
 
 __esn_prompt_git_remote_status() {
     remote=$(git config branch.$1.remote)
+    if [ -z "$remote" ]; then exit 0; fi
     rbranch=$(git config branch.$1.merge)
     rbranch=$remote/${rbranch##refs/heads/}
 
-    if [ -z "$remote" ]; then exit 0; fi
 
     behind=$(git rev-list $1..$rbranch | wc -l)
     ahead=$(git rev-list $rbranch..$1 | wc -l)
@@ -34,7 +34,7 @@ __esn_prompt_git_remote_status() {
 	echo -e "$__esn_col_red$__esn_utf8_updown_arrow"
     elif [ "$ahead" -ne 0 ]; then
 	echo -e "\[$__esn_col_green\]$__esn_utf8_upwards_arrow"
-    elif [ "$ahead" -ne 0 ]; then
+    elif [ "$behind" -ne 0 ]; then
 	echo -e "\[$__esn_col_green\]$__esn_utf8_downwards_arrow"
     fi
 }
